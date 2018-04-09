@@ -33,8 +33,9 @@ class Table extends ArrayObject
     protected $tableSkeleton;
     public $name;
     public $email;
+    public $address;
 
-    public function __construct(array $fields = array(), $tableSkeleton = self::DEFAULT_TABLE_SKELETON)
+    public function __construct(array $fields = [], $tableSkeleton = self::DEFAULT_TABLE_SKELETON)
     {
         parent::__construct($fields, ArrayObject::ARRAY_AS_PROPS);
         $this->setTableTemplate($tableSkeleton);
@@ -48,10 +49,10 @@ class Table extends ArrayObject
         $this->tableSkeleton = $tableSkeleton;
     }
 
-    public function getTableTemplate()
+   /* public function getTableTemplate()
     {
         return $this->tableSkeleton;
-    }
+    }*/
 
     public function resetTableTemplate()
     {
@@ -61,8 +62,54 @@ class Table extends ArrayObject
     public function displayAsTable()
     {
         $fields = $this->getArrayCopy();
-        extract($fields);
+        $name = $this->name = $fields['name'];
+        $email = $this->email = $fields['email'];
+        $address = $this->address = $fields['address'];
+        $tableSkeleton = $this->tableSkeleton;
+        return $tableSkeleton['table_open'].
+         $tableSkeleton['thead_open'].
+         $tableSkeleton['heading_row_start'].
+
+         $tableSkeleton['heading_cell_start'].
+                 'Name'.
+         $tableSkeleton['heading_cell_end'].
+
+         $tableSkeleton['heading_cell_start'].
+         'Email'.
+         $tableSkeleton['heading_cell_end'].
+
+         $tableSkeleton['heading_cell_start'].
+         'Address'.
+         $tableSkeleton['heading_cell_end'].
+
+         $tableSkeleton['heading_row_end'].
+         $tableSkeleton['thead_close'].
+
+         $tableSkeleton['tbody_open'].
+         $tableSkeleton['row_start'].
+         $tableSkeleton['cell_start'].
+         $name.
+         $tableSkeleton['cell_end'].
+         $tableSkeleton['cell_start'].
+         $email.
+         $tableSkeleton['cell_end'].
+         $tableSkeleton['cell_start'].
+         $address.
+         $tableSkeleton['cell_end'].
+
+         $tableSkeleton['row_end'].
+         $tableSkeleton['tbody_close'].
+         $tableSkeleton['table_close'];
        //create table here with data//
-        return ob_get_clean();
+//         ob_get_clean();
     }
 }
+
+$tableObj = new Table([
+        'name' => 'Raja',
+        'email' => 'raja@email.com',
+        'address' => 'dhaka',
+    ]
+);
+
+echo $tableObj->displayAsTable();
