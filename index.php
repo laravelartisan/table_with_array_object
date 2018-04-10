@@ -59,48 +59,32 @@ class Table extends ArrayObject
         $this->tableSkeleton = self::DEFAULT_TABLE_SKELETON;
     }
 
-    public function displayAsTable()
+    public function displayAsTable($tHeads)
     {
         $fields = $this->getArrayCopy();
         $name = $this->name = $fields['name'];
         $email = $this->email = $fields['email'];
         $address = $this->address = $fields['address'];
         $tableSkeleton = $this->tableSkeleton;
-        return $tableSkeleton['table_open'].
-         $tableSkeleton['thead_open'].
-         $tableSkeleton['heading_row_start'].
 
-         $tableSkeleton['heading_cell_start'].
-                 'Name'.
-         $tableSkeleton['heading_cell_end'].
+        $table = $tableSkeleton['table_open']. $tableSkeleton['thead_open']. $tableSkeleton['heading_row_start'];
+        $tblHeads = '';
+        foreach ($tHeads as $tHead) {
+            $tblHeads .= $tableSkeleton['heading_cell_start'].$tHead. $tableSkeleton['heading_cell_end'];
+        }
 
-         $tableSkeleton['heading_cell_start'].
-         'Email'.
-         $tableSkeleton['heading_cell_end'].
+        $table = $table.$tblHeads. $tableSkeleton['heading_row_end']. $tableSkeleton['thead_close']. $tableSkeleton['tbody_open'].$tableSkeleton['row_start'];
 
-         $tableSkeleton['heading_cell_start'].
-         'Address'.
-         $tableSkeleton['heading_cell_end'].
+        $tblData = '';
 
-         $tableSkeleton['heading_row_end'].
-         $tableSkeleton['thead_close'].
+        foreach ($fields as $field) {
+            $tblData .=  $tableSkeleton['cell_start']. $field. $tableSkeleton['cell_end'];
+        }
 
-         $tableSkeleton['tbody_open'].
-         $tableSkeleton['row_start'].
-         $tableSkeleton['cell_start'].
-         $name.
-         $tableSkeleton['cell_end'].
-         $tableSkeleton['cell_start'].
-         $email.
-         $tableSkeleton['cell_end'].
-         $tableSkeleton['cell_start'].
-         $address.
-         $tableSkeleton['cell_end'].
+        $table = $table.$tblData.$tableSkeleton['row_end'].$tableSkeleton['tbody_close']. $tableSkeleton['table_close'];
 
-         $tableSkeleton['row_end'].
-         $tableSkeleton['tbody_close'].
-         $tableSkeleton['table_close'];
-       //create table here with data//
+        return $table;
+
 //         ob_get_clean();
     }
 }
@@ -112,4 +96,9 @@ $tableObj = new Table([
     ]
 );
 
-echo $tableObj->displayAsTable();
+echo $tableObj->name;
+
+
+
+
+echo $tableObj->displayAsTable(['Name', 'Email', 'Address']);
