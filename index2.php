@@ -9,11 +9,7 @@ class Table extends ArrayObject
 
     public function __construct(array $fields = [])
     {
-        parent::__construct($this);
-        $this->_name = $fields['name'];
-        $this->_email = $fields['email'];
-        $this->_address = $fields['address'];
-        $this->fields = $fields;
+        parent::__construct($this, ArrayObject::ARRAY_AS_PROPS);
     }
 
     public function displayAsTable()
@@ -39,17 +35,17 @@ class Table extends ArrayObject
 
 }
 
-    $tableObj = new Table([
-        'name' => 'Raja',
-        'email' => 'raja@email.com',
-        'address' => 'dhaka',
-    ]
-);
+    $tableObj = new Table();
 
-//var_dump($tableObj);
+$tableObj->_name = 'Raja';
+$tableObj->_email = 'Raja@email.com';
+$tableObj->_address = 'Raja Address';
+
+var_dump($tableObj['_name']);
+var_dump($tableObj->_name);
 
 
-$tableWithData = $tableObj->displayAsTable();
+echo $tableWithData = $tableObj->displayAsTable();
 
-echo $tableWithData;
+
 
